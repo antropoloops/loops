@@ -1,6 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
-import { WebBrowser, FileSystem, Audio } from 'expo';
+import { StyleSheet, Text, View, Button,ScrollView } from 'react-native';
+
+import { WebBrowser, FileSystem, Audio, Asset } from 'expo';
 export default class App extends React.Component {
     constructor(props) {
 	super(props);
@@ -9,6 +10,7 @@ export default class App extends React.Component {
 	this.soundObject = new Audio.Sound();
 	// downloading
 	this.downloadAudio = this.downloadAudio.bind(this);
+	this.attachJson = this.attachJson.bind(this);
 	this.onPressDownload = this.onPressDownload.bind(this);
 	// loading
 	this.onPressLoad=this.onPressLoad.bind(this);
@@ -19,16 +21,23 @@ export default class App extends React.Component {
     };
 
     toggleAudioPlayback() {
+	try {
 	this.setState({
 	    isPlaying: !this.state.isPlaying,
 	}, () => (this.state.isPlaying
 		  ? this.soundObject.playAsync()
 		  : this.soundObject.stopAsync()));
+	} catch (e) {
+	    this.setState({message: e});	    
+	    console.log('ERROR playing Audio', e);
+	}
     }
 
     onPressPlay(){
 	console.log("play music");
 	this.setState({message: "toggling music"});
+
+	
 	try {
 	    this.toggleAudioPlayback();
 	} catch (e) {
@@ -40,8 +49,8 @@ export default class App extends React.Component {
 
     
     downloadAudio() {
-	FileSystem.downloadAsync('http://www.sample-videos.com/audio/mp3/crowd-cheering.mp3',
-				 FileSystem.documentDirectory + 'crowd-cheering.mp3')
+	FileSystem.downloadAsync('https://antropoloops.github.io/audiosets/continentes/camino.wav',
+				 FileSystem.documentDirectory + 'camino.wav')
 	    .then(({ uri }) => {
 		console.log('Finished downloading to ', uri);
 		
@@ -55,27 +64,67 @@ export default class App extends React.Component {
 	console.log("downloading audio");
 	this.downloadAudio();
     }
+    attachJson(data){
+	console.log(data);
+	this.setState({ json: JSON.parse(data)});
 
+    }
     onPressLoad(){
 	console.log("load music", this.state.audio);
+	FileSystem.downloadAsync(
+	    'https://raw.githubusercontent.com/antropoloops/app/master/public/continentes.audioset.json',
+	    FileSystem.documentDirectory + 'continentes.audioset.json'
+	)
+	    .then(({ uri }) => {
+	//		console.log('Finished json downloading to ', uri);
+		FileSystem.readAsStringAsync(uri).then(this.attachJson);
+
+		this.setState({ json_uri: uri, message: "downloaded json uri"+uri});
+	    })
+	    .catch(error => {
+		console.error(error);
+	    });
+
 	try {
-	    this.soundObject.loadAsync({ uri: this.state.audio});
+	    this.soundObject.loadAsync({uri: this.state.audio});
 	    this.setState({message:this.state.audio+" loaded!"});
 	} catch (e) {
+	    this.setState({message:e});
 	    console.log('ERROR Loading Audio', e);
 	}
     }
 
+    printSamples(p){
+	var s="";
+	for (var key in p) {
+	    if (p.hasOwnProperty(key)) {
+		s+= key+" ";
+	    }
+	}
+	return s;
+
+    }
     
     render() {
-	return (<View style={styles.container}>
+	return (<ScrollView >
+		<View style={styles.container}>
+		<Text> .... </Text>
+		<Text> .... </Text>
 		<Button onPress={this.onPressDownload} title="DOWNLOAD!" color="#841584" />
 		<Button onPress={this.onPressLoad} title="LOAD!" color="#841584" />
 		<Button onPress={this.onPressPlay} title="PLAY!" color="#841584" />
-		<Text>{this.state.message}</Text>
+		<Text>JAU {this.state.message}</Text>
+		<Text>JSON {this.state.json ?
+			    this.printSamples(this.state.json.samples)
+			    : "oh"} </Text>
 		</View>
+
+		
+		</ScrollView>
+		
 	       );
     }
+    
 }
 
 const styles = StyleSheet.create({
