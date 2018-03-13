@@ -1,7 +1,24 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button,ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Button,ScrollView, FlatList } from 'react-native';
 
 import { WebBrowser, FileSystem, Audio, Asset } from 'expo';
+
+class AButton extends Button {
+    constructor(props){
+	super(props);
+	this.props.disabled=true;
+	this.props.color='#ff00ff';
+    }   
+    render() {
+	return (<Button
+		title={this.props.title}
+		color={this.props.color}
+		onPress={function(){console.log("jolin");}}
+		/>)
+  }
+}
+
+
 export default class App extends React.Component {
     constructor(props) {
 	super(props);
@@ -94,14 +111,13 @@ export default class App extends React.Component {
 	}
     }
 
-    printSamples(p){
-	var s="";
-	for (var key in p) {
-	    if (p.hasOwnProperty(key)) {
-		s+= key+" ";
-	    }
-	}
-	return s;
+    printSamples(samples){
+	const sampleList = Object.keys(samples).map(name => samples[name]);
+	return <FlatList
+	data={sampleList}
+	renderItem={({item}) => <Text key={item.filename}>{item.filename}</Text>} />;
+	
+
 
     }
     
@@ -109,14 +125,13 @@ export default class App extends React.Component {
 	return (<ScrollView >
 		<View style={styles.container}>
 		<Text> .... </Text>
-		<Text> .... </Text>
+		<Text>  .l.l.l. </Text>
 		<Button onPress={this.onPressDownload} title="DOWNLOAD!" color="#841584" />
 		<Button onPress={this.onPressLoad} title="LOAD!" color="#841584" />
-		<Button onPress={this.onPressPlay} title="PLAY!" color="#841584" />
+		<AButton onPress={this.onPressPlay} title="PLAY!" color="#841584"  />
 		<Text>JAU {this.state.message}</Text>
-		<Text>JSON {this.state.json ?
-			    this.printSamples(this.state.json.samples)
-			    : "oh"} </Text>
+
+		{this.state.json ? this.printSamples(this.state.json.samples) : <Text>NOTHING</Text>} 
 		</View>
 
 		
