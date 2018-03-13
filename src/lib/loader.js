@@ -1,44 +1,43 @@
-const soundsCache = {};
-const uriCache = {};
-
 import { FileSystem, Audio } from "expo";
 
 export function loadSet(name) {
   const path = `audiosets/${name}.audioset.json`;
 
   const source = `https://antropoloops.github.io/${path}`;
-  const dest = FileSystem.documentDirectory + name;
+  const uri = FileSystem.documentDirectory + name;
 
-  return FileSystem.downloadAsync(source, dest)
-    .then(result => {
-      return FileSystem.readAsStringAsync(result.uri);
-    })
-    .then(content => JSON.parse(content));
+  // Download (if not present in the filesystem) and return the parsed contents
+  return FileSystem.getInfoAsync(uri)
+    .then(info => (info.exists ? info : FileSystem.downloadAsync(source, uri)))
+    .then(result => FileSystem.readAsStringAsync(result.uri))
+    .then(contents => JSON.parse(contents));
 }
 
-export function downloadSample(name) {
-  if (uriCache[name]) return Promise.resolve(uriCache[name]);
+export function downloadSample(set, name) {
+  const setName = set.name || set.title.toLowerCase();
+  const dir = FileSystem.documentDirectory + name;
+
+  FileSystem.makeDirectoryAsync(dir).then(result =>
+    console.log("Dir!!", result)
+  );
 
   const source = `https://antropoloops.github.io/audiosets/continentes/${name}.wav`;
   const dest = FileSystem.documentDirectory + name + ".wav";
   console.log("Loading", source, dest);
   return FileSystem.downloadAsync(source, dest).then(result => {
-    const { uri } = result;
-    uriCache[name] = uri;
-    return uri;
+    return result.uri;
   });
 }
 
-export function loadSample(name) {
+export function loadAudio(set, name) {
   // if (soundsCache[name]) return Promise.resolve(soundsCache[name]);
 
   const sound = new Audio.Sound();
-  return downloadSample(name)
+  return downloadSample(set, name)
     .then(uri => {
       return sound.loadAsync({ uri });
     })
     .then(() => {
-      soundsCache[name] = sound;
       return sound;
     })
     .catch(err => console.log("download sample err", name, err));

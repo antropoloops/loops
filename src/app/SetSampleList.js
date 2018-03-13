@@ -19,7 +19,7 @@ const SetSampleList = ({ set }) => (
         data={getSampleList(set)}
         renderItem={list => {
           return list.item.key ? (
-            <PlayButton sample={list.item} />
+            <PlayButton set={set} sample={list.item} />
           ) : (
             <Text>Algo pasa aqui</Text>
           );

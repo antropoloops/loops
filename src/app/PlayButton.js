@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "react-native";
-import { loadSample } from "../lib/loader";
+import { loadAudio } from "../lib/loader";
 
 class PlayButton extends Button {
   constructor(props) {
@@ -8,7 +8,7 @@ class PlayButton extends Button {
     this.state = { sound: null, isPlaying: false };
   }
   componentWillMount() {
-    loadSample(this.props.sample.filename).then(sound => {
+    loadAudio(this.props.set, this.props.sample.filename).then(sound => {
       this.setState({ sound });
     });
   }

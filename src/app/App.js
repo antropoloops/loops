@@ -1,16 +1,6 @@
 import React from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  ScrollView,
-  FlatList
-} from "react-native";
-
 import SetSampleList from "./SetSampleList";
 import SelectSet from "./SelectSet";
-import PlayButton from "./PlayButton";
 
 export default class App extends React.Component {
   constructor(props) {

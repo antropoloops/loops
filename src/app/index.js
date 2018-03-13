@@ -1,4 +1,4 @@
 import Expo from "expo";
-import App from "./components/App";
+import App from "./App";
 
 Expo.registerRootComponent(App);
