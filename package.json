@@ -1,10 +1,23 @@
 {
   "main": "node_modules/expo/AppEntry.js",
   "private": true,
+  "scripts": {
+    "start": "exp start",
+    "format": "prettier --write *.{js,json}"
+  },
+  "lint-staged": {
+    "*.{js,json,css}": ["prettier --write", "git add"]
+  },
   "dependencies": {
     "exp": "^49.2.2",
     "expo": "^25.0.0",
     "react": "16.2.0",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-25.0.0.tar.gz"
+    "react-native":
+      "https://github.com/expo/react-native/archive/sdk-25.0.0.tar.gz"
+  },
+  "devDependencies": {
+    "husky": "^0.14.3",
+    "lint-staged": "^7.0.0",
+    "prettier": "^1.11.1"
   }
 }
