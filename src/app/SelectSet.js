@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  ScrollView,
-  FlatList
-} from "react-native";
+import { StyleSheet, Text, View, Button, ScrollView } from "react-native";
 
 import { loadSet } from "../lib/loader";
 
@@ -16,9 +9,7 @@ export default class SelectSet extends React.Component {
   }
 
   loadSet(name) {
-    console.log("loading set", name);
     loadSet(name).then(set => {
-      console.log("Set loaded!", set);
       this.props.onSetLoaded(set);
     });
   }

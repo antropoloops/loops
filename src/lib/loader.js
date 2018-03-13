@@ -13,13 +13,18 @@ export function loadSet(name) {
     .then(contents => JSON.parse(contents));
 }
 
+function makeDirectoryIfNotExists(dir) {
+  return FileSystem.getInfoAsync(dir).then(
+    info =>
+      info.exists ? dir : FileSystem.makeDirectoryAsync(dir).then(() => dir)
+  );
+}
+
 export function downloadSample(set, name) {
   const setName = set.name || set.title.toLowerCase();
-  const dir = FileSystem.documentDirectory + name;
+  const dir = FileSystem.documentDirectory + setName;
 
-  FileSystem.makeDirectoryAsync(dir).then(result =>
-    console.log("Dir!!", result)
-  );
+  makeDirectoryIfNotExists(dir).then(result => console.log("Dir!!", result));
 
   const source = `https://antropoloops.github.io/audiosets/continentes/${name}.wav`;
   const dest = FileSystem.documentDirectory + name + ".wav";

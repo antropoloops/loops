@@ -14,7 +14,6 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     // Audio.setIsEnabledAsync(true);
-    this.props.time = Date.now();
     this.state = { isPlaying: false, message: "welcome" };
     this.soundObject = new Audio.Sound();
     // downloading
@@ -88,7 +87,6 @@ export default class App extends React.Component {
       FileSystem.documentDirectory + "continentes.audioset.json"
     )
       .then(({ uri }) => {
-        //		console.log('Finished json downloading to ', uri);
         FileSystem.readAsStringAsync(uri).then(this.attachJson);
 
         this.setState({ json_uri: uri, message: "downloaded json uri" + uri });

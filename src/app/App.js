@@ -1,5 +1,5 @@
 import React from "react";
-import SetSampleList from "./SetSampleList";
+import Set from "./Set";
 import SelectSet from "./SelectSet";
 
 export default class App extends React.Component {
@@ -12,7 +12,7 @@ export default class App extends React.Component {
     return this.state.set === null ? (
       <SelectSet onSetLoaded={set => this.setState({ set })} />
     ) : (
-      <SetSampleList set={this.state.set} />
+      <Set set={this.state.set} />
     );
   }
 }
