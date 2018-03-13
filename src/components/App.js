@@ -11,7 +11,6 @@ import {
 import SetSampleList from "./SetSampleList";
 import SelectSet from "./SelectSet";
 import PlayButton from "./PlayButton";
-import { loadSet } from "./lib/loader";
 
 export default class App extends React.Component {
   constructor(props) {

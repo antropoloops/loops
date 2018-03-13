@@ -9,11 +9,8 @@ export function loadSet(name) {
   const source = `https://antropoloops.github.io/${path}`;
   const dest = FileSystem.documentDirectory + name;
 
-  console.log("loadSet", source, dest);
-
   return FileSystem.downloadAsync(source, dest)
     .then(result => {
-      console.log("load set result", result);
       return FileSystem.readAsStringAsync(result.uri);
     })
     .then(content => JSON.parse(content));

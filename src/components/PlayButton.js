@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "react-native";
-import { loadSample } from "./lib/loader";
+import { loadSample } from "../lib/loader";
 
 class PlayButton extends Button {
   constructor(props) {

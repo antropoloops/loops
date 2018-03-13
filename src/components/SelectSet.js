@@ -8,7 +8,7 @@ import {
   FlatList
 } from "react-native";
 import PlayButton from "./PlayButton";
-import { loadSet } from "./lib/loader";
+import { loadSet } from "../lib/loader";
 
 export default class SelectSet extends React.Component {
   constructor(props) {

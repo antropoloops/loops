@@ -8,7 +8,7 @@ import {
   FlatList
 } from "react-native";
 import PlayButton from "./PlayButton";
-import { loadSet } from "./lib/loader";
+import { loadSet } from "../lib/loader";
 
 const SetSampleList = ({ set }) => (
   <ScrollView>
